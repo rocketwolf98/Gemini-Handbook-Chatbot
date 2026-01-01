@@ -14,50 +14,6 @@ st.set_page_config(
 with open( ".streamlit/style.css" ) as css:
     st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
 
-# # Custom CSS for chat interface
-# st.markdown("""
-                    
-#     <style>
-    
-#     .stApp {
-#         max-width: 900px;
-#         margin: 0 auto;
-#     }
-    
-#     /* Improve chat message styling */
-#     .stChatMessage {
-#         padding: 1rem;
-#         border-radius: 0.5rem;
-#         margin-bottom: 1rem;
-#     }
-    
-#     /* User message background */
-#     [data-testid="stChatMessageContent"] {
-#         background-color: transparent;
-#     }
-    
-#     /* Make the input more prominent and taller */
-#     .stChatInputContainer {
-#         border-top: 1px solid #e0e0e0;
-#         padding-top: 1rem;
-#     }
-    
-#     /* Expand chat input height */
-#     .stChatInputContainer textarea {
-#         min-height: 80px !important;
-#         max-height: 120px !important;
-#         padding: 1rem !important;
-#         font-size: 1rem !important;
-#     }
-    
-#     /* Source expander styling */
-#     .streamlit-expanderHeader {
-#         font-size: 0.9rem;
-#         color: #666;
-#     }
-#     </style>
-# """, unsafe_allow_html=True)
-
 
 INDEX_NAME = "handbook-rag"
 TOP_K = 8
