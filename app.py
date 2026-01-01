@@ -1,54 +1,62 @@
 import streamlit as st
-from streamlit_chat import message
 import os
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from pinecone import Pinecone
+
+
+
 
 st.set_page_config(
     page_title="Handbook Support Service",
     layout="centered")
 
-# Custom CSS for chat interface
-st.markdown("""
-    <style>
-    .stApp {
-        max-width: 900px;
-        margin: 0 auto;
-    }
+
+with open( ".streamlit/style.css" ) as css:
+    st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
+
+# # Custom CSS for chat interface
+# st.markdown("""
+                    
+#     <style>
     
-    /* Improve chat message styling */
-    .stChatMessage {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-    }
+#     .stApp {
+#         max-width: 900px;
+#         margin: 0 auto;
+#     }
     
-    /* User message background */
-    [data-testid="stChatMessageContent"] {
-        background-color: transparent;
-    }
+#     /* Improve chat message styling */
+#     .stChatMessage {
+#         padding: 1rem;
+#         border-radius: 0.5rem;
+#         margin-bottom: 1rem;
+#     }
     
-    /* Make the input more prominent and taller */
-    .stChatInputContainer {
-        border-top: 1px solid #e0e0e0;
-        padding-top: 1rem;
-    }
+#     /* User message background */
+#     [data-testid="stChatMessageContent"] {
+#         background-color: transparent;
+#     }
     
-    /* Expand chat input height */
-    .stChatInputContainer textarea {
-        min-height: 80px !important;
-        max-height: 120px !important;
-        padding: 1rem !important;
-        font-size: 1rem !important;
-    }
+#     /* Make the input more prominent and taller */
+#     .stChatInputContainer {
+#         border-top: 1px solid #e0e0e0;
+#         padding-top: 1rem;
+#     }
     
-    /* Source expander styling */
-    .streamlit-expanderHeader {
-        font-size: 0.9rem;
-        color: #666;
-    }
-    </style>
-""", unsafe_allow_html=True)
+#     /* Expand chat input height */
+#     .stChatInputContainer textarea {
+#         min-height: 80px !important;
+#         max-height: 120px !important;
+#         padding: 1rem !important;
+#         font-size: 1rem !important;
+#     }
+    
+#     /* Source expander styling */
+#     .streamlit-expanderHeader {
+#         font-size: 0.9rem;
+#         color: #666;
+#     }
+#     </style>
+# """, unsafe_allow_html=True)
 
 
 INDEX_NAME = "handbook-rag"
@@ -67,7 +75,7 @@ def init_rag_system():
             raise ValueError("API keys not found in environment...")
         
         embeddings = GoogleGenerativeAIEmbeddings(
-            model = "models/embedding-001",
+            model = "models/gemini-embedding-001",
             google_api_key= google_api_key
         )
 
@@ -91,8 +99,39 @@ if error:
     st.info("API Keys are not implemented. Contact the developer for fixes.")
     st.stop()
 
-st.title("Handbook Support Service")
-st.caption("Ask anything about the handbook! Please take note that this is for reference purposes. In case if this requires immediate action, please refer to an appropriate body instead. (Note: You can use any language, but it only replies in English.)")
+has_messages = len(st.session_state.messages) > 0
+
+
+if not has_messages:
+
+    st.title("Handbook Support Service")
+
+    col1,col2 = st.columns(2, border=True)
+
+    with col1:
+        st.markdown("""
+        ### ❓ 
+        #### Ask anything about the handbook!
+                
+        Ask anything about the handbook whether it could be about your grades, your concerns, 
+        or anything on the fly (except anything that involves schedules.). You can also ask in any language! 
+    """
+        , width='content')
+
+    with col2:
+        st.markdown("""
+        ### ⏰
+        #### Limited time only!
+                
+        This runs on a free trial instance of the Gemini API. In case you encounter issues or errors regarding
+        your conversation, feel free to reach the developer for them to explain.
+    """
+        , width='content')
+
+else:
+    st.markdown("### Handbook Support Service")
+    st.divider()
+
 
 for message in st.session_state.messages:
     avatar = "👤" if message["role"] == "user" else "🤖"
@@ -102,6 +141,10 @@ for message in st.session_state.messages:
             with st.expander("View sources"):
                 for i, source in enumerate(message["sources"],1):
                     st.caption(f"**Source {i}** - Page {source['page']}")
+
+
+
+
 
 if prompt := st.chat_input("Ask anything about the handbook!"):
     st.session_state.messages.append({"role":"user","content": prompt})
@@ -122,7 +165,7 @@ if prompt := st.chat_input("Ask anything about the handbook!"):
                 results = index.query(
                     vector= question_embedding,
                     top_k = TOP_K,
-                    include_metdata= True
+                    include_metadata= True
                 )
 
                 retrieved_chunks = []
@@ -163,13 +206,14 @@ Current Question: {prompt}
 Answer:"""
                 
                 response = llm.invoke(system_prompt)
-                answer = response.content
+                answer = response.content[0]['text']
 
                 st.markdown(answer)
 
                 with st.expander("View sources"):
                     for i, source in enumerate(sources, 1):
                         st.caption(f"**Source {i}** - Page {source['page']} (Relevance: {source['score']:.2%})")
+                
 
                 st.session_state.messages.append({
                     "role": "assistant",
@@ -177,7 +221,17 @@ Answer:"""
                     "sources": sources
                 })
 
+                
+
             except Exception as e:
                   st.error(f"Error generating response: {str(e)}")
                   st.info("If you see this error, kindly contact the developer.")
+
+if has_messages:
+    if st.button("Clear conversation", type="secondary", use_container_width=False):
+        st.session_state.messages = []
+        st.rerun()
+
+st.caption("For reference purposes only. In case if this requires immediate action, please refer to an appropriate body instead.")
+
 
