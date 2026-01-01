@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Young+Serif&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Lexend', sans-serif;
+    color: #091747;
+}
+
+
+.stApp {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+/* Improve chat message styling */
+.stChatMessage {
+	padding: 1rem;
+	border-radius: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+/* User message background */
+[data-testid="stChatMessageContent"] {
+	background-color: transparent;
+}
+
+/* Make the input more prominent and taller */
+.stChatInputContainer {
+	border-top: 1px solid #e0e0e0;
+	padding-top: 1rem;
+}
+
+/* Expand chat input height */
+.stChatInputContainer textarea {
+	min-height: 80px !important;
+	max-height: 120px !important;
+	padding: 1rem !important;
+	font-size: 1rem !important;
+}
+
+/* Source expander styling */
+.streamlit-expanderHeader {
+	font-size: 0.9rem;
+	color: #666;
+}
+
+.st-emotion-cache-yfw52f {
+  font-family: "Lexend", sans-serif;
+  font-size: 1rem;
+  color: inherit;
+  overflow-wrap: break-word;
+}
+
+.st-emotion-cache-1fq9onn {
+  font-family: "Lexend", sans-serif;
+  font-size: 0.875rem;
+  color: inherit;
+  overflow-wrap: break-word;
+}
+
+.st-emotion-cache-yfw52f h1, .st-emotion-cache-yfw52f h2, .st-emotion-cache-yfw52f h3, .st-emotion-cache-yfw52f h4, .st-emotion-cache-yfw52f h5, .st-emotion-cache-yfw52f h6 {
+  font-family: "Young Serif", serif;
+  line-height: 1.2;
+  margin: 0px;
+  color: inherit;
+}
+
+.st-b7 {
+  font-family: "Lexend", sans-serif;
+}
+
+.st-emotion-cache-164xsu3 p, .st-emotion-cache-164xsu3 ol, .st-emotion-cache-164xsu3 ul, .st-emotion-cache-164xsu3 dl, .st-emotion-cache-164xsu3 li {
+  font-size: inherit;
+  font-family: "Lexend", sans-serif;
+}
