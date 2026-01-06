@@ -14,6 +14,6 @@ You can start working (assuming you have your API Keys and environment variables
 ### 🤷‍♂️ What Else?
 This repository is still a barebones skeleton of the app. If you make you own, a Jupyter Notebook named *document_processing.ipynb* is a straightforward notebook that does the text processing and word embeddings. Please ensure you have your own PDF file ready, because it doesn't work by itself.
 
-If you like to try this out, you can opt to open it here.
-➡️ https://gemini-handbook-chatbot-crgk499ffz2dlzef4thulz.streamlit.app/
+If you like to try this out, you can opt to open it here.<br>
+➡️ https://gemini-handbook-chatbot-crgk499ffz2dlzef4thulz.streamlit.app/<br>
 _This is limited time only as this uses a free trial plan_
